@@ -18,15 +18,7 @@ func NewPool(threads int) (*Deadpool, error) {
 }
 
 func (d *DeadPool) Add(fn func(args ...interface{})) {
-	d.sem <- true //try to put something in the buffered channel, if its full it's going to block
-	go func() {
-		defer func() { <-sem }() //read from the channel to free it up
-		fn(args)
-	}()
 }
 
 func (d *DeadPool) Wait() {
-	for i := 0; i < cap(sem); i++ {
-		sem <- true //pushes trues back on once all the go routines start finishing up
-	}
 }
